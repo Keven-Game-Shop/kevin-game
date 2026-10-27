@@ -5,31 +5,33 @@ account: {
 title: "شحن على الأكونت",
 products: [
 {id:"a100",name:"100 جوهرة",price:50,desc:"شحن مباشر على الأكونت",icon:"💎"},
-{id:"a310",name:"310 جوهرة",price:150,desc:"شحن مباشر على الأكونت",icon:"💎"},
-{id:"a520",name:"520 جوهرة",price:230,desc:"شحن مباشر على الأكونت",icon:"💎"},
-{id:"a1060",name:"1060 جوهرة",price:385,desc:"شحن مباشر على الأكونت",icon:"💎"},
-{id:"a2180",name:"2180 جوهرة",price:770,desc:"شحن مباشر على الأكونت",icon:"💎"},
-{id:"a5600",name:"5600 جوهرة",price:1900,desc:"شحن مباشر على الأكونت",icon:"💎"}
+{id:"a310",name:"310 جوهرة",price:175,desc:"شحن مباشر على الأكونت",icon:"💎"},
+{id:"a520",name:"520 جوهرة",price:290,desc:"شحن مباشر على الأكونت",icon:"💎"},
+{id:"a1060",name:"1060 جوهرة",price:570,desc:"شحن مباشر على الأكونت",icon:"💎"},
+{id:"a2180",name:"2180 جوهرة",price:1100,desc:"شحن مباشر على الأكونت",icon:"💎"},
+{id:"a5600",name:"5600 جوهرة",price:1900,desc:"شحن مباشر على الأكونت",icon:"💎"},
+    {id:"weekly-account",name:"عضوية أسبوعية على الأكونت",price:90,desc:"450 جوهرة — أسبوعياً",icon:"👑"},
+    {id:"monthly-account",name:"عضوية شهرية على الأكونت",price:380,desc:"2600 جوهرة — شهرياً",icon:"👑"}
 ]
 },
 id: {
 title: "شحن بالـ ID",
 products: [
-{id:"i100",name:"100 + 10 جوهرة",price:60,desc:"شحن عن طريق ID اللاعب",icon:"🆔"},
-{id:"i210",name:"210 + 21 جوهرة",price:120,desc:"شحن عن طريق ID اللاعب",icon:"🆔"},
-{id:"i530",name:"530 + 53 جوهرة",price:300,desc:"شحن عن طريق ID اللاعب",icon:"🆔"},
-{id:"i1080",name:"1080 + 108 جوهرة",price:600,desc:"شحن عن طريق ID اللاعب",icon:"🆔"},
-{id:"i2200",name:"2200 + 220 جوهرة",price:1200,desc:"شحن عن طريق ID اللاعب",icon:"🆔"},
-{id:"i5600",name:"5600 + 560 جوهرة",price:2700,desc:"راجع السعر قبل الطلب",icon:"🆔"}
+{id:"i100",name:"100 جوهرة",price:60,desc:"شحن عن طريق ID اللاعب | $1.15",icon:"💎"},
+{id:"i210",name:"210 جوهرة",price:120,desc:"شحن عن طريق ID اللاعب | $2.30",icon:"💎"},
+{id:"i310",name:"310 جوهرة",price:175,desc:"شحن عن طريق ID اللاعب | $3.36",icon:"💎"},
+{id:"i520",name:"520 جوهرة",price:290,desc:"شحن عن طريق ID اللاعب | $5.57",icon:"💎"},
+{id:"i1060",name:"1060 جوهرة",price:570,desc:"شحن عن طريق ID اللاعب | $10.94",icon:"💎"},
+{id:"i2200",name:"2200 جوهرة",price:1100,desc:"شحن عن طريق ID اللاعب | $21.11",icon:"💎"}
 ]
 },
 memberships: {
 title: "العضويات والبطاقات",
 products: [
-{id:"weekly",name:"عضوية أسبوعية",price:90,desc:"450 جوهرة — أسبوعي",icon:"👑"},
-{id:"monthly",name:"عضوية شهرية",price:385,desc:"2600 جوهرة — شهري",icon:"👑"},
+{id:"weekly",name:"عضوية أسبوعية",price:125,desc:"450 جوهرة — أسبوعي | $2.40",icon:"🟢"},
+{id:"monthly",name:"عضوية شهرية",price:580,desc:"2600 جوهرة — شهري | $11.13",icon:"🟣"},
 {id:"level",name:"عضوية مستوى",price:220,desc:"تأكد من التوفر قبل الدفع",icon:"🎟️"},
-{id:"booyah",name:"Booyah Pass",price:220,desc:"تأكد من التوفر والسعر",icon:"🔥"}
+{id:"booyah",name:"Booyah Pass",price:180,desc:"تأكد من التوفر والسعر | $3.45",icon:"🔥"}
 ]
 },
 accounts: {
@@ -118,8 +120,7 @@ const message = [
 `ملاحظات: ${notes}`,
 "",
 "عارف إن الطلب غير مؤكد إلا بعد مراجعة الدفع وتأكيد المتجر."
-].join("
-");
+].join("\n");
 window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener");
 });
 $("#year").textContent = new Date().getFullYear();
@@ -136,4 +137,35 @@ installPrompt.prompt();
 await installPrompt.userChoice;
 installPrompt = null; $("#installBtn").classList.add("hidden");
 });
+// زر تشغيل كل الأزرار
+const runAllBtn = document.getElementById("runAllBtn");
+if (runAllBtn) {
+    runAllBtn.addEventListener("click", () => {
+        // اختار أول منتج في قسم شحن على الأكونت (جواهر)
+        const accountProducts = catalog.account.products;
+        if (accountProducts.length > 0) {
+            // اختيار أول منتج في قسم الجواهر
+            const gemsProduct = accountProducts[0];
+            selectedProduct = {...gemsProduct, category: catalog.account.title};
+            $("#selectedName").textContent = gemsProduct.name;
+            $("#selectedPrice").textContent = gemsProduct.price == null ? "حسب الاتفاق" : `${gemsProduct.price} ج.م`;
+            
+            // الانتقال إلى قسم الطلب
+            $("#order").scrollIntoView({behavior:"smooth",block:"start"});
+            
+            // إظهار رسالة تأكيد
+            alert(`تم اختيار: ${gemsProduct.name} - ${gemsProduct.desc}\nالسعر: ${gemsProduct.price == null ? "حسب الاتفاق" : `${gemsProduct.price} ج.م`}`);
+            
+            // التمرير تلقائيًا لعرض قسم الجواهر والأسعار
+            setTimeout(() => {
+                document.querySelector('.category-card[data-category="account"]')?.click();
+                // الانتقال لأسفل لعرض المنتجات
+                setTimeout(() => {
+                    window.scrollTo({top: document.querySelector('.products-section').offsetTop - 100, behavior: 'smooth'});
+                }, 300);
+            }, 500);
+        }
+    });
+}
+
 renderProducts("account");
