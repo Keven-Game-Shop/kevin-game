@@ -17,12 +17,12 @@ products: [
 id: {
 title: "شحن بالـ ID",
 products: [
-{id:"i100",name:"100 جوهرة",price:60,desc:"شحن عن طريق ID اللاعب | $1.15",icon:"💎"},
-{id:"i210",name:"210 جوهرة",price:120,desc:"شحن عن طريق ID اللاعب | $2.30",icon:"💎"},
-{id:"i310",name:"310 جوهرة",price:175,desc:"شحن عن طريق ID اللاعب | $3.36",icon:"💎"},
-{id:"i520",name:"520 جوهرة",price:290,desc:"شحن عن طريق ID اللاعب | $5.57",icon:"💎"},
-{id:"i1060",name:"1060 جوهرة",price:570,desc:"شحن عن طريق ID اللاعب | $10.94",icon:"💎"},
-{id:"i2200",name:"2200 جوهرة",price:1100,desc:"شحن عن طريق ID اللاعب | $21.11",icon:"💎"}
+{id:"i100",name:"100 جوهرة",price:60,desc:"شحن مباشر على حساب اللاعب | $1.15",icon:"💎"},
+{id:"i210",name:"210 جوهرة",price:120,desc:"شحن مباشر على حساب اللاعب | $2.30",icon:"💎"},
+{id:"i310",name:"310 جوهرة",price:175,desc:"شحن مباشر على حساب اللاعب | $3.36",icon:"💎"},
+{id:"i520",name:"520 جوهرة",price:290,desc:"شحن مباشر على حساب اللاعب | $5.57",icon:"💎"},
+{id:"i1060",name:"1060 جوهرة",price:570,desc:"شحن مباشر على حساب اللاعب | $10.94",icon:"💎"},
+{id:"i2200",name:"2200 جوهرة",price:1100,desc:"شحن مباشر على حساب اللاعب | $21.11",icon:"💎"}
 ]
 },
 memberships: {
@@ -113,10 +113,27 @@ const desc = document.createElement("p");
             // استخراج عدد الجواهر من اسم المنتج
             const gemsMatch = product.name.match(/(\d+)\s*جوهرة/);
             if (gemsMatch) {
-                gemsText = `💎 ${gemsMatch[1]} جوهرة`;
+                gemsText = `<span class="gems-highlight">💎 ${gemsMatch[1]} جوهرة</span>`;
             }
         }
-        desc.innerHTML = `${product.desc}${gemsText ? "<br>" + gemsText : ""}`;
+        let priceText = "";
+if (product.price !== null) {
+    priceText = `<br><span class="product-price">${product.price} ج.م</span>`;
+}
+// إضافة سعر العملة إن وجد
+const dollarText = product.desc.includes("$") ? product.desc.match(/\$(\d+\.\d+)/)?.[0] || "" : "";
+// إنشاء وصف المنتج
+let descContent = product.desc;
+if (gemsText) {
+    descContent += "<br>" + gemsText;
+}
+if (priceText) {
+    descContent += priceText;
+}
+if (dollarText) {
+    descContent += " | " + dollarText;
+}
+desc.innerHTML = descContent;
 const bottom = document.createElement("div"); bottom.className = "product-bottom";
 const price = document.createElement("div"); price.className = "price"; price.innerHTML = money(product.price);
 const choose = document.createElement("button"); choose.type = "button"; choose.className = "choose-btn"; choose.textContent = selectedProduct?.id === product.id ? "تم الاختيار ✓" : "اختار";
