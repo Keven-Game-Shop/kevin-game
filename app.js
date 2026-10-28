@@ -62,6 +62,39 @@ let selectedProduct = null;
 const $ = (s) => document.querySelector(s);
 const productsEl = $("#products");
 const money = (price) => price == null ? "حسب الاتفاق" : `${price} <small>ج.م</small>`;
+// بيانات حسابات الدفع
+const paymentInfo = {
+  "Vodafone Cash": {
+    name: "فودافون كاش",
+    number: "اكتب رقم فودافون كاش هنا"
+  },
+  "InstaPay": {
+    name: "إنستا باي",
+    number: "اكتب عنوان إنستا باي هنا"
+  }
+};
+
+// تحديث بيانات الدفع عند اختيار طريقة الدفع
+document.querySelectorAll('input[name="payment"]').forEach(radio => {
+  radio.addEventListener("change", function() {
+    const selectedMethod = paymentInfo[this.value];
+    if (selectedMethod) {
+      document.querySelector(".payment-method:nth-child(1) .method-name").textContent = selectedMethod.name;
+      document.querySelector(".payment-method:nth-child(1) .method-number").textContent = selectedMethod.number;
+      document.querySelector(".payment-method:nth-child(2)").style.display = "none";
+    }
+  });
+});
+
+// عرض اسم الملف عند اختيار صورة الإيصال
+$("#receipt").addEventListener("change", function() {
+  const file = this.files[0];
+  if (file) {
+    $("#file-name").textContent = "الصورة المختارة: " + file.name;
+  } else {
+    $("#file-name").textContent = "لم يتم اختيار صورة";
+  }
+});
 function renderProducts(category) {
 activeCategory = category;
 const group = catalog[category];
@@ -108,7 +141,14 @@ alert("اكتب ID اللاعب. لو اخترت خدمة لا تحتاج ID، �
 const payment = document.querySelector('input[name="payment"]:checked')?.value || "غير محدد";
 const playerName = $("#playerName").value.trim() || "غير مذكور";
 const notes = $("#notes").value.trim() || "لا توجد";
+const receiptFile = $("#receipt")[0].files[0];
+
 const priceText = selectedProduct.price == null ? "يُحدد بعد التواصل" : `${selectedProduct.price} جنيه مصري`;
+
+// الحصول على بيانات الدفع
+const paymentMethod = paymentInfo[payment] || {name: payment, number: "غير محدد"};
+
+// إنشاء الرسالة الأساسية
 const message = [
 "السلام عليكم، عايز أطلب من KEVIN GAME STORE 🎮",
 `القسم: ${selectedProduct.category}`,
@@ -116,12 +156,36 @@ const message = [
 `السعر الظاهر: ${priceText}`,
 `Player ID: ${playerId || "غير مطلوب"}`,
 `اسم اللاعب: ${playerName}`,
-`طريقة الدفع المفضلة: ${payment}`,
+`طريقة الدفع: ${paymentMethod.name}`,
+`رقم الحساب: ${paymentMethod.number}`,
 `ملاحظات: ${notes}`,
 "",
 "عارف إن الطلب غير مؤكد إلا بعد مراجعة الدفع وتأكيد المتجر."
+"يرجى رفع صورة الإيصال بعد التحويل."
+"شكراً لثقتكم بـ KEVIN GAME STORE 🎮"
 ].join("\n");
-window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener");
+
+// إذا كان هناك صورة للإيصال
+if (receiptFile) {
+  // إنشاء رابط مؤقت للصورة
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const imageData = e.target.result;
+    const base64Data = imageData.split(",")[1];
+    
+    // إنشاء رابط واتساب مع الصورة
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank", "noopener");
+    
+    // إظهار رسالة تأكيد
+    alert("تم إرسال الطلب بنجاح. الصورة ستتم مراجعتها قريباً.");
+  };
+  reader.readAsDataURL(receiptFile);
+} else {
+  // إذا لم يكن هناك صورة، إرسال الرسالة فقط
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener");
+  alert("تم إرسال الطلب بنجاح. الصورة الإلزامية لم يتم رفعها.");
+}
 });
 $("#year").textContent = new Date().getFullYear();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {

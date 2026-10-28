@@ -61,8 +61,27 @@
 <label for="notes">ملاحظات <span class="muted">(اختياري)</span></label>
 <textarea id="notes" name="notes" rows="2" placeholder="أي تفاصيل إضافية عن الطلب"></textarea>
 <div class="selected-summary"><span>اختيارك</span><b id="selectedName">لم تختَر باقة بعد</b><strong id="selectedPrice">—</strong></div>
+<div class="payment-info">
+<h3>بيانات التحويل</h3>
+<div class="payment-methods">
+<div class="payment-method">
+<span class="method-name">فودافون كاش</span>
+<span class="method-number">اكتب رقم فودافون كاش هنا</span>
+</div>
+<div class="payment-method">
+<span class="method-name">إنستا باي</span>
+<span class="method-number">اكتب عنوان إنستا باي هنا</span>
+</div>
+</div>
+<p>حوّل قيمة الطلب، ثم ارفع صورة الإيصال بالأسفل.</p>
+</div>
+<div class="receipt-upload">
+<label for="receipt">صورة الإيصال <span class="muted">(مطلوبة)</span></label>
+<input type="file" id="receipt" name="receipt" accept="image/*" required>
+<p id="file-name">لم يتم اختيار صورة</p>
+</div>
 <button class="primary-btn full" type="submit">إرسال الطلب على واتساب <span>↗</span></button>
-<button id="runAllBtn" class="secondary-btn full">تشغيل كل الأزرار <span>▶</span></button>
+
 <p class="form-footnote">إرسال الطلب لا يعني تأكيد الدفع أو تنفيذ الشحن. راجع تفاصيل الطلب مع المتجر.</p>
 </form>
 </section>

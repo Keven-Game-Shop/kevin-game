@@ -24,13 +24,12 @@
 <div id="kgs-payment-info" hidden>
 <p id="kgs-payment-name"></p>
 <p id="kgs-payment-number"></p>
-<button type="button" id="kgs-copy">📋 نسخ بيانات التحويل</button>
 <p>حوّل قيمة الطلب، ثم ارفع صورة الإيصال بالأسفل.</p>
 </div>
 <label for="kgs-receipt">صورة التحويل</label>
 <input id="kgs-receipt" type="file" accept="image/*">
 <p id="kgs-file-name">لم يتم اختيار صورة</p>
-<button type="button" id="kgs-submit">تأكيد الطلب</button>
+
 <p id="kgs-message" role="status"></p>
 </section>
 <style>
@@ -142,17 +141,7 @@ if (!info) return;
 $("kgs-payment-name").textContent = info.name;
 $("kgs-payment-number").textContent = info.number;
 });
-$("kgs-copy").addEventListener("click", async () => {
-const info = paymentInfo[$("kgs-payment").value];
-if (!info) return;
-try {
-await navigator.clipboard.writeText(info.number);
-$("kgs-message").textContent = "تم نسخ بيانات التحويل.";
-} catch {
-$("kgs-message").textContent =
-"انسخ بيانات التحويل يدويًا: " + info.number;
-}
-});
+
 $("kgs-receipt").addEventListener("change", () => {
 const file = $("kgs-receipt").files[0];
 $("kgs-file-name").textContent = file
